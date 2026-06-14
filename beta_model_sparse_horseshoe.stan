@@ -1,10 +1,11 @@
 // beta_model_sparse_horseshoe.stan 
 
-// this is the initial hierarchical beta model with the full 358 gene set and horseshoe priors. a sparse matrix formulation was used to increase computational efficiency
+// this is the initial hierarchical beta model with the full 358 gene set and horseshoe priors
+// a sparse matrix formulation was used to increase computational efficiency
 
 data {
-  int<lower=0> N;                      // number of cells
-  int<lower=0> P;                      // number of genes
+  int<lower=0> N;                      // number of cells (20,000 training)
+  int<lower=0> P;                      // number of genes (358)
   vector<lower=0, upper=1>[N] y;       // pseudotime position
   matrix[N, 4] covariates;             // age, sex, PMI, sequencing depth
   
@@ -47,7 +48,7 @@ parameters {
   // region hierarchal structure
   vector[N_broad] alpha_broad;         // broad region intercepts
   vector[N_region] z_region;           // non-centered subregion
-  real<lower=0> sigma_region;          // within-broad region standard deviation
+  real<lower=0> sigma_region;          // within-broad-region standard deviation
   
   // donor hierarchy
   vector[N_donor] z_donor;             // non-centered donor intercepts
@@ -93,7 +94,7 @@ model {
   tau         ~ student_t(1, 0, scale_global);
   caux_global ~ inv_gamma(2.0, 2.0);   
   
-  // covariate priors (weakly informative defaults)
+  // intercept and covariate priors (weakly informative defaults)
   beta_0   ~ normal(0, 1);
   beta_cov ~ normal(0, 1);
   
