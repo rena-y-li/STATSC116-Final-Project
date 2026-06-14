@@ -1,5 +1,7 @@
 // beta_inference_model_optimized.stan
 
+// this was the code used to fit both the 15 and 50 gene models
+
 data {
   int<lower=0> N;                       // 20,000 cells
   int<lower=0> P;                       // number of genes (15 or 50)
